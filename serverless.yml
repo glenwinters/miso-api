@@ -1,7 +1,11 @@
-service: apollo-lambda
+service: miso-api
+
+useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs16.x
+  stage: prod
   httpApi:
     cors: true
 functions:
@@ -20,3 +24,12 @@ functions:
 # Omit the following lines if you aren't using TS!
 plugins:
   - serverless-plugin-typescript
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: ${env:CUSTOM_DOMAIN}
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+    endpointType: 'regional'
+    apiType: 'http'
